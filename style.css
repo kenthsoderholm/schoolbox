@@ -1,0 +1,33 @@
+body {margin: 0px;padding: 0px;}
+
+#bg-img{
+	position: absolute;
+	z-index: -1;
+	bottom: 0;
+	left: 0;
+}
+
+.navbar-inverse .navbar-inner {
+	background: url('img/header_bg.png')repeat-x;
+	border: none;
+}
+.table {margin-top: 20px;}
+.table thead {
+	background: url('img/content_header_bg.png')repeat-x;
+	color: #fff;
+}
+.table td {line-height: 35px;}
+.table .td-img {
+	background: url('img/Folder-35.png')no-repeat center;
+}
+
+.dropdown-menu > .li {
+	font-size: 11px;
+	display: block;
+	padding: 3px 10px;
+	clear: both;
+	font-weight: normal;
+	line-height: 20px;
+	color: #333333;
+	white-space: nowrap;
+}
