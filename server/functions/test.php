@@ -8,7 +8,7 @@
 	
 	<body>
 		
-		<form action="login.php" method="post">
+		<form action="user.php?login" method="post">
 		
 			<input type="text" id="email" name="email" />
 			<input type="password" id="password" name="password" />
