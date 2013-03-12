@@ -17,11 +17,7 @@ window.HeaderView = Backbone.View.extend({
     login:function (event) {
         event.preventDefault(); // Tar bort standard utförandet från
         $('.alert-error').hide(); // Gömmer felmeddelande om det finns
-<<<<<<< HEAD
-        console.log('Loggin in... ');
-=======
         console.log('Logging in... ');
->>>>>>> Ch ch ch changes
         var formValues = {
             email: $('#inputEmail').val(),
             password: $('#inputPassword').val()
