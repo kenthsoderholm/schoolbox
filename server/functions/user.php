@@ -19,12 +19,16 @@
 				if(session_start()){
 					$_SESSION['user'] = array(
 						'name' => $result[0]['firstname'] . " " . $result[0]['lastname'],
-						'userid' => $result[0]['userid']
+						'userid' => $result[0]['userid'],
+						'created' => $result[0]['created']
 						);
 						
 						//Vad ska vi returnera för svar?
-						return "User logged in";
+						return json_encode($_SESSION);
 				}
+			}
+			else {
+				return "error";
 			}
 		}
 	}
@@ -63,8 +67,7 @@
 	
 	switch ($uri) {
 		case "login":
-			echo login(),"<br />";
-			var_dump($_SESSION);
+			echo login();
 			break;
 		case "logout":
 			echo logout();

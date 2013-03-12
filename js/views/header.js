@@ -17,7 +17,11 @@ window.HeaderView = Backbone.View.extend({
     login:function (event) {
         event.preventDefault(); // Tar bort standard utförandet från
         $('.alert-error').hide(); // Gömmer felmeddelande om det finns
+<<<<<<< HEAD
         console.log('Loggin in... ');
+=======
+        console.log('Logging in... ');
+>>>>>>> Ch ch ch changes
         var formValues = {
             email: $('#inputEmail').val(),
             password: $('#inputPassword').val()
@@ -25,21 +29,20 @@ window.HeaderView = Backbone.View.extend({
 
         
      $.ajax( {
-        url: 'server/login.php', //Ändra till din önskade källa.
+        url: 'server/functions/user.php?login', //Ändra till din önskade källa.
         method: 'post',
         data: formValues,
-        dataType: 'html',
+        dataType: 'json',
         success:function (data) {
           console.log(["Login request details: ", data]);
-         
           if(data.error) {  // Visa fel
               $('.alert-error').text(data.error.text).show();
           }
           else { // Skicka dem till errorsidan
               window.location.replace('#loginerror');
           }
-            }
-        });
+        }
+      });
     }
 
 });
