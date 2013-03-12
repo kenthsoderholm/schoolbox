@@ -42,13 +42,8 @@
         $.ajax( {
         url: 'server/functions/user.php?check', //Ändra till din önskade källa.
         method: 'POST',
-<<<<<<< HEAD
         dataType: 'html',
         success:function () {
-          console.log("Hej");}
-=======
-        //data: formValues,
-        dataType: 'html',
         success:function (data) {
           console.log(["Login request details: ", data]);
         }
