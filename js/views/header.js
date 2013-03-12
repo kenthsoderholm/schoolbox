@@ -17,7 +17,6 @@ window.HeaderView = Backbone.View.extend({
     login:function (event) {
         event.preventDefault(); // Tar bort standard utförandet från
         $('.alert-error').hide(); // Gömmer felmeddelande om det finns
-        var url = 'http://localhost/schoolbox/server/login.php';
         console.log('Loggin in... ');
         var formValues = {
             email: $('#inputEmail').val(),
