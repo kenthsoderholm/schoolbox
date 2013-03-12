@@ -42,10 +42,9 @@
         $.ajax( {
         url: 'server/functions/user.php?check', //Ändra till din önskade källa.
         method: 'POST',
-        data: formValues,
         dataType: 'html',
-        success:function (data) {
-          console.log(["Login request details: ", data]);
+        success:function () {
+          console.log(["Hej");
         });
 </script>
 </body>
