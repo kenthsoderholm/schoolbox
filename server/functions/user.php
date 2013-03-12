@@ -63,6 +63,15 @@
 		}
 	}
 	
+	function check() {
+		if (isset($_SESSION) && $_SESSION['user']['userid'] != null) {
+			return "user is logged in";
+		}
+		else {
+			return "user is not logged in";
+		}
+	}
+	
 	$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 	
 	switch ($uri) {
@@ -71,6 +80,9 @@
 			break;
 		case "logout":
 			echo logout();
+			break;
+		case "check";
+			echo check();
 			break;
 		default:
 			echo "error";
