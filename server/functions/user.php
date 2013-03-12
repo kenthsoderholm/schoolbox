@@ -64,6 +64,7 @@
 	}
 	
 	function check() {
+		session_start();
 		if (isset($_SESSION) && $_SESSION['user']['userid'] != null) {
 			return "user is logged in";
 		}
