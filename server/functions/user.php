@@ -91,11 +91,11 @@
 				$statement->bindParam(":created", $today);
 				$statement->bindParam(":storageused", $storageUsedNewUser);
 				if($statement->execute()) {
-								$statement = $db->query("SELECT LAST_INSERT_ID() as latest_id from users");
-								$statement->execute();
-								$result = $statement->fetchAll();			
-			
-								$latest_id =  $result[0]['latest_id']
+					$statement = $db->query("SELECT LAST_INSERT_ID() as latest_id from users");
+					$statement->execute();
+					$result = $statement->fetchAll();			
+
+					$latest_id =  $result[0]['latest_id'];
 					
 					mkdir('../files/' . str_pad($latest_id, 8, "0", STR_PAD_LEFT), 0777); //Skapar en mapp i files som har samma namn som userid fast leftpaddat med nollor så att det är åtta tecken dvs userid '123' har mappnamnet '00000123'
 					return json_encode("User and directory Created");
