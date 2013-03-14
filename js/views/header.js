@@ -31,6 +31,7 @@ window.HeaderView = Backbone.View.extend({
         dataType: 'json',
         success:function (data) {
           console.log(["Login request details: ", data]);
+          console.log(data.userid);
           if(data.error) {  // Visa fel
               $('.alert-error').text(data.error.text).show();
           }
