@@ -1,5 +1,6 @@
 <?php
 	include('../includes/pdo.inc.php');
+	include('templating.php');
 	
 	function login() {
 	
@@ -17,6 +18,9 @@
 			if (count($result) == 1) { //Finns användaren?
 				if ($result[0]['active'] <= $today) { //Är användaren blockad?
 					if(session_start()){ 
+
+						$_SESSION['loginattempts'] = 1;
+
 						$_SESSION['user'] = array(
 							'name' => $result[0]['firstname'] . " " . $result[0]['lastname'],
 							'userid' => $result[0]['userid'],
@@ -24,16 +28,22 @@
 							);
 							
 						$passback = array(
-							'name' => $_SESSION['user']['name'],
-							'storageused' => $_SESSION['user']['storageused'],
-							'userid' => $_SESSION['user']['userid']
+							'html' => dressWithTemplate('user')
 						);
 
-							return json_encode($passback); 
+							return jsonEncoder($passback); 
 					}
 				}
 				else {
-					return json_encode("User is blocked");
+					session_start();
+					$_SESSION['user'] = array(
+							'active' => $result[0]['active']
+							);
+					$passback = array(
+						'html' => dressWithTemplate('blocked')
+					);
+
+					return jsonEncoder($passback);
 				}
 			}
 			else { //Vid en misslyckad inloggning
@@ -47,14 +57,16 @@
 						$statement->bindParam(":active", $tomorrow);
 						$statement->bindParam(":email", $_POST['email']);
 						$statement->execute();
+						return jsonEncoder($passback = array ('html' => dressWithTemplate('blocked')));
 					}
+					return jsonEncoder($passback = array ('html' => dressWithTemplate('wrongpassword')));
 				}
 				else { //Finns loginattempts inte i $_SESSION så skapar vi den och blocked
 					$_SESSION['loginattempts'] = 1;
 					$_SESSION['blocked'] = false;
 				}
 				
-				return json_encode($_SESSION); //Returnerar $_SESSION-arrayen
+				return jsonEncoder($passback = array ('html' => dressWithTemplate('wrongpassword')));
 
 			}
 		}
@@ -64,7 +76,12 @@
 		session_start();
 		session_unset();
 		session_destroy();
-		return json_encode("User logged out");
+
+		$passback = array(
+			'html' => dressWithTemplate('index')
+		);
+
+		return jsonEncoder($passback);
 	} //Köttar sessionen.
 	
 	function register() {
@@ -72,7 +89,7 @@
 		global $db;
 		
 		if(isset($_POST)) {
-			$values = $_POST['formValues'];
+			$values = $_POST;
 			$today = date("Y-m-d H:i:s"); //Tar "nu" för att använda det som created och active vid skapandet av en user.
 			$storageUsedNewUser = 0;
 			$statement = $db->prepare("SELECT userid FROM users WHERE email=:email"); //Kollar först om vi har en användare med den epostadressen
@@ -91,18 +108,20 @@
 				$statement->bindParam(":created", $today);
 				$statement->bindParam(":storageused", $storageUsedNewUser);
 				if($statement->execute()) {
-					$statement = $db->query("SELECT LAST_INSERT_ID() as latest_id from users");
-					$statement->execute();
-					$result = $statement->fetchAll();			
-
-					$latest_id =  $result[0]['latest_id'];
+								$statement = $db->query("SELECT LAST_INSERT_ID() as latest_id from users");
+								$statement->execute();
+								$result = $statement->fetchAll();			
+			
+								$latest_id =  $result[0]['latest_id'];
 					
 					mkdir('../files/' . str_pad($latest_id, 8, "0", STR_PAD_LEFT), 0777); //Skapar en mapp i files som har samma namn som userid fast leftpaddat med nollor så att det är åtta tecken dvs userid '123' har mappnamnet '00000123'
-					return json_encode("User and directory Created");
+					session_start();
+					$_SESSION['signup'] = 'Your account is now created, Enjoy!';
+					return jsonEncoder($passback = array('html' => dressWithTemplate('index')));
 				}
 			}
 			else {
-				return json_encode("Email already connected to user, try another email");
+				return jsonEncoder("Email already connected to user, try another email");
 			}
 		}
 	}
@@ -113,12 +132,13 @@
 			
 			$passback = array(
 				'loggedin' => true,
-				'userid' => $_SESSION['user']['userid']
+				'userid' => $_SESSION['user']['userid'],
+				'html' => dressWithTemplate('user')
 			);
-			return json_encode($passback);
+			return jsonEncoder($passback);
 		}
 		else {
-			return json_encode($passback = array('loggedin' => false));
+			return jsonEncoder($passback = array('loggedin' => false, 'html' => dressWithTemplate('index')));
 		}
 	}
 	
@@ -126,16 +146,16 @@
 	//Plockar ut querystring för att använda switch och få rätt funktion
 	switch ($uri) {
 		case "login":
-			echo login();
+			login();
 			break;
 		case "logout":
-			echo logout();
+			logout();
 			break;
 		case "check":
-			echo check();
+			check();
 			break;
 		case "register":
-			echo register();
+			register();
 			break;
 		default:
 			echo "error";
