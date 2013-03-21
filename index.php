@@ -1,5 +1,7 @@
 <?php 
   include 'server/functions/templating.php';
+  include'server/includes/navigate_files.inc.php';
+include'server/includes/upload.inc.php';
 ?>
 
 <!DOCTYPE html>

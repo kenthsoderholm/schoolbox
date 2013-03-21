@@ -1,3 +1,4 @@
+
 <style type="text/css">
   #popupMenu {
     display: none;
@@ -70,7 +71,7 @@
         <div class="well sidebar-nav">
           <ul class="nav nav-list">
             <li class="nav-header">Document</li>
-            <li><a href="#"><i class="icon-file"></i>Upload File</a></li>
+            <li><a href="#upload" role="button" data-toggle="modal"><i class="icon-file"></i>Upload File</a></li>
             <li><a href="#"><i class="icon-folder-close"></i>New folder</a></li>
           </ul>
         </div><!--/.well -->
@@ -87,74 +88,13 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
+          <th>Filename</th>
+          <th>Type</th>
+          <th>Created</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr><tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
+      <tbody id="directorylisting">
+        
       </tbody>
     </table>
 </div><!--/span-->
@@ -170,6 +110,21 @@
 
 </div><!-- /.container -->
 
+
+<!-- Modal -->
+<div id="upload" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Upload a new file</h3>
+  </div>
+  <div class="modal-body">
+    <form enctype="multipart/form-data">
+      Choose file: <input name="uploaded" id="uploaded" type="file" /><br />
+      <input type="submit" class="btn btn-success" id="uploadButton" value="Upload" />
+    </form> 
+  </div>
+</div>
+
 <script>
 $('#logoutButton').click(function(){
     ajax('server/functions/user.php?logout', null, html);
@@ -179,6 +134,9 @@ $('#home').click(function(){
   });
 $('#settingsButton').click(function(){
     ajax('server/functions/utils.php?settings', null, page);
+  });
+$('#uploadButton').click(function(){
+    ajax('server/functions/files.php?uploadfile', null, directorylisting);
   });
 
 

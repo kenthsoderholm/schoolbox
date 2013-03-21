@@ -18,13 +18,12 @@
 			if (count($result) == 1) { //Finns användaren?
 				if ($result[0]['active'] <= $today) { //Är användaren blockad?
 					if(session_start()){ 
-
-						$_SESSION['loginattempts'] = 1;
-
+						$_SESSION['loginattempts'] = 0;
 						$_SESSION['user'] = array(
 							'name' => $result[0]['firstname'] . " " . $result[0]['lastname'],
 							'userid' => $result[0]['userid'],
-							'storageused' => $result[0]['storageused']
+							'storageused' => $result[0]['storageused'],
+							'activedirectory' => 'server/files/' . str_pad($result[0]['userid'], 8, "0", STR_PAD_LEFT)
 							);
 							
 						$passback = array(
@@ -48,25 +47,48 @@
 			}
 			else { //Vid en misslyckad inloggning
 				session_start();
-				if (isset($_SESSION['loginattempts'])) { //Kolla efter loginattempts i $_SESSION-arrayen
-					$_SESSION['loginattempts']++;
-					if ($_SESSION['loginattempts'] >= 3) {
-						$_SESSION['blocked'] = true;
-						$tomorrow = date("Y-m-d H:i:s", time()+86400);
-						$statement = $db->prepare("UPDATE users set active=:active where email=:email"); //Om användaren har tre misslyckade inloggningsförsök så blockas denne, genom att active sätts till en tidpunkt om 24timmar.
-						$statement->bindParam(":active", $tomorrow);
-						$statement->bindParam(":email", $_POST['email']);
-						$statement->execute();
-						return jsonEncoder($passback = array ('html' => dressWithTemplate('blocked')));
+				$statement = $db->prepare('SELECT active, email FROM users where email = :email');
+				$statement->bindParam(":email", $values['email']);
+				$statement->execute();
+				$result = $statement->fetchAll();
+
+				if (count($result) > 0) { //Finns epostadressen i databasen?
+					if ($result[0]['active'] <= $today) { //Är användaren blockad?
+						if (isset($_SESSION['loginattempts'])) { //Kolla efter loginattempts i $_SESSION-arrayen
+							$_SESSION['loginattempts']++;
+							if ($_SESSION['loginattempts'] >= 3) {
+								$_SESSION['blocked'] = true;
+								$tomorrow = date("Y-m-d H:i:s", time()+86400);
+								$statement = $db->prepare("UPDATE users set active=:active where email=:email"); //Om användaren har tre misslyckade inloggningsförsök så blockas denne, genom att active sätts till en tidpunkt om 24timmar.
+								$statement->bindParam(":active", $tomorrow);
+								$statement->bindParam(":email", $_POST['email']);
+								$statement->execute();
+								$_SESSION['loginattempts'] = 0;
+								$_SESSION['user'] = array(
+									'active' => $result[0]['active']
+								);
+								return jsonEncoder($passback = array('html' => dressWithTemplate('blocked')));
+							}
+						
+							return jsonEncoder($passback = array('html' => dressWithTemplate('wrongpassword')));
+						}
+
+						else { //Finns loginattempts inte i $_SESSION så skapar vi den och blocked
+							$_SESSION['loginattempts'] = 1;
+							$_SESSION['blocked'] = false;
+						}
+					
+					return jsonEncoder($passback = array('html' => dressWithTemplate('wrongpassword')));
 					}
-					return jsonEncoder($passback = array ('html' => dressWithTemplate('wrongpassword')));
+					else {
+						$_SESSION['user'] = array(
+									'active' => $result[0]['active']
+								);
+						return jsonEncoder($passback = array('html' => dressWithTemplate('blocked'))); //Användaren är blockad och har angett fel lösenord
+					}
 				}
-				else { //Finns loginattempts inte i $_SESSION så skapar vi den och blocked
-					$_SESSION['loginattempts'] = 1;
-					$_SESSION['blocked'] = false;
-				}
-				
-				return jsonEncoder($passback = array ('html' => dressWithTemplate('wrongpassword')));
+
+				return jsonEncoder($passback = array('html' => dressWithTemplate('tryagain')));
 
 			}
 		}

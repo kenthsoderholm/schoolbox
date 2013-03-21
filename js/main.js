@@ -18,5 +18,8 @@ function html(data){
 function page(data){
 	$('.row-fluid').html(data.html);
 }
+function directorylisting(data){
+	$('#directorylisting').append(data.html);
+}
 
 ajax('server/functions/user.php?check', null,  html);
