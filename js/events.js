@@ -22,8 +22,7 @@ doc.on('submit', '#createFolder', function(e){
   var formValues = {
       folderName: $('#folderName').val()
   };
-  ajax('server/functions/upload.php?makedir', formValues, null);
-  check();
+  ajax('server/functions/upload.php?makedir', formValues, check);
 });
 
 doc.on('submit', '#uploadForm', function(e){
@@ -32,8 +31,7 @@ doc.on('submit', '#uploadForm', function(e){
 });
 
 doc.on('click', '#backbtn', function(){
-  ajax('server/functions/utils.php?backdir', null , null);
-  check();
+  ajax('server/functions/utils.php?backdir', null , check);
 });
 
 doc.on('dblclick', '#directorylisting > tr > td', function(){
@@ -43,8 +41,7 @@ doc.on('dblclick', '#directorylisting > tr > td', function(){
       newDir : parentId
     };
     
-    ajax('server/functions/utils.php?updatedir', formvalues , null);
-    check();
+    ajax('server/functions/utils.php?updatedir', formvalues , check);
   }
 });
 

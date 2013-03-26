@@ -13,7 +13,7 @@
 		  $currentDirectory = implode('/', $currentDirectory);
 
 		  $_SESSION['user']['currentDirectory'] = $currentDirectory;
-		  
+		return jsonEncoder($passback = array('oliwer'));
 		}
 
 		function updateDir() {
@@ -24,6 +24,7 @@
 					$_SESSION['user']['currentDirectory'] = $_SESSION['user']['activedirectory'];
 				}
 			}
+		return jsonEncoder($passback = array('oliwer'));
 		}
 		$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
 		//Plockar ut querystring för att använda switch och få rätt funktion

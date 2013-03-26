@@ -5,14 +5,13 @@
 	
 	function makeDir() {
 		// Skapa mapp i currentDir från SESSION
-		print $_SESSION['user']['currentDirectory'];
 		if(isset($_POST) && $_POST['folderName'] != ''){
 			$currentDir = '../../' . $_SESSION['user']['currentDirectory'] . '/' . $_POST['folderName'];
 			mkdir($currentDir, 0777);
 		}else {
 			echo 'Folder must include characters';
 		}
-		
+		return jsonEncoder($passback = array('oliwer'));
 	}
 
 	function upload() {
