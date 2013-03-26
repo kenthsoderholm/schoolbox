@@ -1,6 +1,8 @@
 <?php
+	session_start();
 	include('../includes/pdo.inc.php');
 	include('templating.php');
+	include('files.php');
 	
 	function login() {
 	
@@ -17,24 +19,22 @@
 			$result = $statement->fetchAll();
 			if (count($result) == 1) { //Finns användaren?
 				if ($result[0]['active'] <= $today) { //Är användaren blockad?
-					if(session_start()){ 
-						$_SESSION['loginattempts'] = 0;
-						$_SESSION['user'] = array(
-							'name' => $result[0]['firstname'] . " " . $result[0]['lastname'],
-							'userid' => $result[0]['userid'],
-							'storageused' => $result[0]['storageused'],
-							'activedirectory' => 'server/files/' . str_pad($result[0]['userid'], 8, "0", STR_PAD_LEFT)
-							);
-							
-						$passback = array(
-							'html' => dressWithTemplate('user')
+					$_SESSION['loginattempts'] = 0;
+					$_SESSION['user'] = array(
+						'name' => $result[0]['firstname'] . " " . $result[0]['lastname'],
+						'userid' => $result[0]['userid'],
+						'storageused' => $result[0]['storageused'],
+						'activedirectory' => 'server/files/' . str_pad($result[0]['userid'], 8, "0", STR_PAD_LEFT)
 						);
+					$_SESSION['user']['currentDirectory'] = $_SESSION['user']['activedirectory'];
 
-							return jsonEncoder($passback); 
-					}
+					$passback = array(
+						'html' => dressWithTemplate('user')
+					);
+
+					return jsonEncoder($passback); 
 				}
 				else {
-					session_start();
 					$_SESSION['user'] = array(
 							'active' => $result[0]['active']
 							);
@@ -46,7 +46,6 @@
 				}
 			}
 			else { //Vid en misslyckad inloggning
-				session_start();
 				$statement = $db->prepare('SELECT active, email FROM users where email = :email');
 				$statement->bindParam(":email", $values['email']);
 				$statement->execute();
@@ -95,7 +94,6 @@
 	}
 	
 	function logout() {
-		session_start();
 		session_unset();
 		session_destroy();
 
@@ -137,7 +135,7 @@
 								$latest_id =  $result[0]['latest_id'];
 					
 					mkdir('../files/' . str_pad($latest_id, 8, "0", STR_PAD_LEFT), 0777); //Skapar en mapp i files som har samma namn som userid fast leftpaddat med nollor så att det är åtta tecken dvs userid '123' har mappnamnet '00000123'
-					session_start();
+
 					$_SESSION['signup'] = 'Your account is now created, Enjoy!';
 					return jsonEncoder($passback = array('html' => dressWithTemplate('index')));
 				}
@@ -149,12 +147,16 @@
 	}
 	
 	function check() {
-		session_start();
 		if (isset($_SESSION['user']['userid']) && $_SESSION['user']['userid'] != null) {
+			
+			$fsBasePath = str_replace('server/functions', '', dirname(__FILE__));
+			$relPath = $_SESSION['user']['currentDirectory'];
+			$dirAndFileListData = ffList($fsBasePath, $relPath);
 			
 			$passback = array(
 				'loggedin' => true,
 				'userid' => $_SESSION['user']['userid'],
+				'htmlDir' => dressWithTemplate('dirandfilelist', $dirAndFileListData),
 				'html' => dressWithTemplate('user')
 			);
 			return jsonEncoder($passback);

@@ -10,7 +10,6 @@
 	- Contact
 	- Terms
 
-
 Efter börja med file upload and mapping
 
 

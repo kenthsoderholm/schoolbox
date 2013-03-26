@@ -30,7 +30,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <div id="home" class="brand" style="cursor:pointer"><img src="css/img/logo.png" style="height: 20px;" /></div>
+        <div id="logo" class="brand" style="cursor:pointer"><img src="css/img/logo.png" style="height: 20px;" /></div>
 
         <!-- Responsive Navbar Web -->
         <div class="nav-collapse collapse">
@@ -45,11 +45,9 @@
                 <li><a id="settingsButton" style="cursor:pointer"><i class="icon-wrench"></i> Settings</a></li>
                 <li><a style="cursor:pointer" id="logoutButton"><i class="icon-off"></i> Logout</a></li>
                 <li class="divider"></li>
-                <li class="li"><?php print($_SESSION['user']['storageused']); ?>MB of 100MB used</li>
+                <li class="li"><?php print(number_format($_SESSION['user']['storageused'], 2)); ?>MB of 100MB used</li>
                 <li class="progress progress-striped active" style="height: 10px; margin: 0 10px 10px 10px">
-                  <div class="bar" style="width: <?php print($_SESSION['user']['storageused']); ?>%;"></div>
-
-
+                  <div class="bar" style="width: <?php print(number_format($_SESSION['user']['storageused'], 2)); ?>%;"></div>
                 </li>
               </ul>
             </li>
@@ -72,7 +70,7 @@
           <ul class="nav nav-list">
             <li class="nav-header">Document</li>
             <li><a href="#upload" role="button" data-toggle="modal"><i class="icon-file"></i>Upload File</a></li>
-            <li><a href="#"><i class="icon-folder-close"></i>New folder</a></li>
+            <li><a href="#folder" role="button" data-toggle="modal"><i class="icon-folder-close"></i>New folder</a></li>
           </ul>
         </div><!--/.well -->
         <div class="well hidden-phone hidden-tablet" style="height:340px;">
@@ -84,17 +82,29 @@
 
 <div class="span9">
   <div class="well">
+    <?php
+      if($_SESSION['user']['currentDirectory'] != $_SESSION['user']['activedirectory']){
+        print('<button id="backbtn" class="btn btn-link">Back</button>');
+        print("<script>
+          $('#backbtn').click(function() {
+            ajax('server/functions/utils.php?backdir', null , null);
+            ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
+          });
+          </script>");
+      }
+    ?>
   <table class="table table-hover">
       <thead>
         <tr>
           <th>#</th>
           <th>Filename</th>
-          <th>Type</th>
+          <th>Kind</th>
+          <th>Size</th>
           <th>Created</th>
         </tr>
       </thead>
       <tbody id="directorylisting">
-        
+
       </tbody>
     </table>
 </div><!--/span-->
@@ -111,17 +121,35 @@
 </div><!-- /.container -->
 
 
-<!-- Modal -->
+<!-- Upload file modal -->
 <div id="upload" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">Upload a new file</h3>
   </div>
   <div class="modal-body">
-    <form enctype="multipart/form-data">
-      Choose file: <input name="uploaded" id="uploaded" type="file" /><br />
-      <input type="submit" class="btn btn-success" id="uploadButton" value="Upload" />
-    </form> 
+     <form id="uploadForm">
+      <input type="file" name="uploadFile" id="uploadFile"/>
+      <br />
+      <input type="submit" value="Upload" class="btn btn-success">
+    </form>
+
+  </div>
+</div>
+
+<!-- New folder modal -->
+<div id="folder" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Upload a new file</h3>
+  </div>
+  <div class="modal-body">
+     <form id="createFolder">
+      <input type="input" name="folderName" id="folderName" placeholder="Foldername"/>
+      <br />
+      <input type="submit" value="Create" class="btn btn-success">
+    </form>
+
   </div>
 </div>
 
@@ -130,13 +158,28 @@ $('#logoutButton').click(function(){
     ajax('server/functions/user.php?logout', null, html);
   });
 $('#home').click(function(){
-    ajax('server/functions/user.php?check', null, html);
+    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
+  });
+$('#logo').click(function(){
+    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
   });
 $('#settingsButton').click(function(){
     ajax('server/functions/utils.php?settings', null, page);
   });
-$('#uploadButton').click(function(){
-    ajax('server/functions/files.php?uploadfile', null, directorylisting);
+$('#createFolder').submit(function(e){
+    e.preventDefault();
+
+    var formValues = {
+        folderName: $('#folderName').val()
+    };
+    ajax('server/functions/upload.php?makedir', formValues, null);
+    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
+  });
+$('#uploadForm').submit(function(e){
+    e.preventDefault();
+    sendFormdataWithAjax('server/functions/upload.php?upload', $(this)[0], function(x){
+      ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
+    });
   });
 
 
