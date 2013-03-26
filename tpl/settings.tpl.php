@@ -15,11 +15,3 @@
     <div class="tab-pane" id="accountsettings">Accountsettings</div>
   </div>
 </div>
-
- 
-<script>
- $('#myTab a').click(function (e) {
-  e.preventDefault();
-  $(this).tab('show');
-})
-</script>

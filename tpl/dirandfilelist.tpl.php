@@ -13,23 +13,4 @@ $fileimage = ($fileext == '') ? 'folder':'file';
     </tr>
     ');
   }
-  print("
-    <script type=text/javascript>
-      
-        $('#directorylisting > tr > td').dblclick(function() {
-          var parentId = $(this).parent().attr('id');
-          if (parentId.indexOf('.') == -1) {
-            var formvalues = {
-              newDir : parentId
-            };
-            
-            ajax('server/functions/utils.php?updatedir', formvalues , null);
-            ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-          }
-        });
-      
-
-      
-      
-    </script>");
 ?>

@@ -19,14 +19,15 @@ function sendFormdataWithAjax(url, domForm, callback){
 	    processData: false,
 	    type: 'POST',
 	    success: function(data){
-	        callback(data);
+	    	callback(data);
 	    }
 	});
 }
 
 
-function html(data){
+function html(data, callback){
 	$('body').html(data.html);
+	callback && callback(data);
 }
 function page(data){
 	$('.row-fluid').html(data.html);
@@ -35,6 +36,17 @@ function directorylisting(data){
 	$('#directorylisting').append(data.htmlDir);
 }
 
-ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});	
+function check(){
+	return ajax('server/functions/user.php?check', null,  
+		function(d){
+			html(d, 
+				function(d){
+					directorylisting(d);
+				});
+		});
+}
 
+$(function(){
+	check();
+});
 

@@ -124,7 +124,7 @@ $('#loginButton').click(function(e){
         password: $('#inputPassword').val()
     };
       
-    ajax('server/functions/user.php?login', formValues, html);
+    ajax('server/functions/user.php?login', formValues, check);
   });
 $('#signupButton').click(function(e){
     e.preventDefault();
@@ -140,7 +140,7 @@ $('#signupButton').click(function(e){
   } else{
     console.log('Not ok');
   }
-    ajax('server/functions/user.php?register', formValues, html);
+    ajax('server/functions/user.php?register', formValues, check);
 
   });
 </script>

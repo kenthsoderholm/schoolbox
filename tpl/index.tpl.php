@@ -1,6 +1,7 @@
 <!-- Signupsuccess
 ================================================== -->
-<?php if(isset($_SESSION['signup'])){?>
+<?php
+if(isset($_SESSION['signup'])){?>
   <div id="signupsuccess" style="position: relative; top:0; z-index: 1500;">
     <div class="alert alert-block alert-success"><?php print($_SESSION['signup']); ?></div>
   </div>
@@ -132,16 +133,6 @@
 </div>
 
 <script>
-$('#loginButton').click(function(e){
-    e.preventDefault();
-
-    var formValues = {
-        email: $('#inputEmail').val(),
-        password: $('#inputPassword').val()
-    };
-    ajax('server/functions/user.php?login', formValues, html);
-  });
-
 $('#signupButton').click(function(e){
     e.preventDefault();
 
@@ -156,14 +147,7 @@ $('#signupButton').click(function(e){
   } else{
     console.log('Not ok');
   }
-    ajax('server/functions/user.php?register', formValues, html);
+    ajax('server/functions/user.php?register', formValues, check);
 
   });
-
-
-
-
-
-
-
 </script>

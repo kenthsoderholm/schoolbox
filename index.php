@@ -20,22 +20,25 @@
     
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/strapon-style.css">
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/functions.js"></script>
   </head>
   <body>
     <!-- CONTENT GOES HERE -->
   </body>
-  <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery-min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/functions.js"></script>
-
-
+  
     <script type="text/javascript">
       $('[rel="tooltip"]').tooltip('show');
       $('[rel="tooltip"]').tooltip('hide');
+    </script>
+</html>
+ide');
     </script>
 </html>

@@ -28,7 +28,12 @@
 						);
 					$_SESSION['user']['currentDirectory'] = $_SESSION['user']['activedirectory'];
 
+					$fsBasePath = str_replace('server/functions', '', dirname(__FILE__));
+					$relPath = $_SESSION['user']['currentDirectory'];
+					$dirAndFileListData = ffList($fsBasePath, $relPath);
+
 					$passback = array(
+						'htmlDir' => dressWithTemplate('dirandfilelist', $dirAndFileListData),
 						'html' => dressWithTemplate('user')
 					);
 

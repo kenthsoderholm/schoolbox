@@ -73,11 +73,6 @@
             <li><a href="#folder" role="button" data-toggle="modal"><i class="icon-folder-close"></i>New folder</a></li>
           </ul>
         </div><!--/.well -->
-        <div class="well hidden-phone hidden-tablet" style="height:340px;">
-            <ul class="nav">
-             <a class="twitter-timeline" href="https://twitter.com/schoolboxlive" data-widget-id="312519691287531521">Tweets av @schoolboxlive</a>
-          </ul>
-        </div><!--/.well -->
       </div><!--/span-->
 
 <div class="span9">
@@ -85,12 +80,6 @@
     <?php
       if($_SESSION['user']['currentDirectory'] != $_SESSION['user']['activedirectory']){
         print('<button id="backbtn" class="btn btn-link">Back</button>');
-        print("<script>
-          $('#backbtn').click(function() {
-            ajax('server/functions/utils.php?backdir', null , null);
-            ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-          });
-          </script>");
       }
     ?>
   <table class="table table-hover">
@@ -153,40 +142,8 @@
   </div>
 </div>
 
+
 <script>
-$('#logoutButton').click(function(){
-    ajax('server/functions/user.php?logout', null, html);
-  });
-$('#home').click(function(){
-    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-  });
-$('#logo').click(function(){
-    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-  });
-$('#settingsButton').click(function(){
-    ajax('server/functions/utils.php?settings', null, page);
-  });
-$('#createFolder').submit(function(e){
-    e.preventDefault();
-
-    var formValues = {
-        folderName: $('#folderName').val()
-    };
-    ajax('server/functions/upload.php?makedir', formValues, null);
-    ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-  });
-$('#uploadForm').submit(function(e){
-    e.preventDefault();
-    sendFormdataWithAjax('server/functions/upload.php?upload', $(this)[0], function(x){
-      ajax('server/functions/user.php?check', null,  function(d){html(d);directorylisting(d);});
-    });
-  });
-
-
-
-$(document).ready(function(){
-  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-});
 
 // Rightclick events
 $(document).bind("contextmenu", function(e) {

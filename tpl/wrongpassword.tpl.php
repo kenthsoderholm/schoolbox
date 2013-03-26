@@ -61,16 +61,3 @@
   </form>
 
 </div> <!-- /container -->
-
-<script>
-$('#loginButton').click(function(e){
-    e.preventDefault();
-
-    var formValues = {
-        email: $('#inputEmail').val(),
-        password: $('#inputPassword').val()
-    };
-      
-    ajax('server/functions/user.php?login', formValues, html);
-  });
-</script>
