@@ -4,6 +4,10 @@ doc.on('click', '#logoutButton', function(){
   ajax('server/functions/user.php?logout', null, html);
 });
 
+doc.on('click', '#popLogoutButton', function(){
+  ajax('server/functions/user.php?logout', null, html);
+});
+
 doc.on('click', '#home', function(){
   check();
 });

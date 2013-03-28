@@ -8,11 +8,12 @@
 
 <div id="popupMenu">
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display: block; position: static; margin-bottom: 5px;">
-    <li><a tabindex="-1" href="#">Action</a></li>
-    <li><a tabindex="-1" href="#">Another action</a></li>
-    <li><a tabindex="-1" href="#">Something else here</a></li>
+    <li><a tabindex="-1" href="#"><i class="icon-folder-close"></i> My documents</a></li>
+    <li><a tabindex="-1" href="#"><i class="icon-wrench"></i> Settings</a></li>
+    <li><a tabindex="-1" href="#"><i class="icon-file"></i>Upload File</a></li>
+    <li><a tabindex="-1" href="#"><i class="icon-folder-close"></i>New folder</a></li>
     <li class="divider"></li>
-    <li><a tabindex="-1" href="#">Separated link</a></li>
+    <li><a style="cursor:pointer" id="logoutButton" tabindex="-1" href="#"><i class="icon-off"></i> Logout</a></li>
   </ul>
 </div>
 
