@@ -56,8 +56,9 @@ doc.on('click', '#loginButton', function(e){
       email: $('#inputEmail').val(),
       password: $('#inputPassword').val()
   };
-    
-  ajax('server/functions/user.php?login', formValues, check);
+  
+  //check(); och ändra nedan till html för att visa wrongpass och blocked
+  ajax('server/functions/user.php?login', formValues, html);
 });
 
 doc.on('click', '#myTab a', function(e){
