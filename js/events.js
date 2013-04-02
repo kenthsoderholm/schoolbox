@@ -58,7 +58,7 @@ doc.on('click', '#loginButton', function(e){
   };
   
   //check(); och ändra nedan till html för att visa wrongpass och blocked
-  ajax('server/functions/user.php?login', formValues, html);
+  ajax('server/functions/user.php?login', formValues, check);
 });
 
 doc.on('click', '#myTab a', function(e){
